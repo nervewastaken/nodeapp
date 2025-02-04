@@ -16,8 +16,14 @@ jobs:
       - name: Pull latest changes
         run: git pull origin main
 
-      - name: Stop existing containers
-        run: docker compose down
+      - name: Stop and remove existing Node.js container
+        run: |
+          docker stop nodeapp || true
+          docker rm nodeapp || true
+          docker rmi nodeapp || true
+
+      - name: Remove unused Docker images (optional)
+        run: docker image prune -f
 
       - name: Rebuild and start containers
         run: docker compose up --build -d
